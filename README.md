@@ -12,3 +12,6 @@ lsusb
 # read data of a given device with the program:
 read_serial.py
 
+# download data from raspberry pi
+scp -P port_number -r pi@192.168.1.100:/home/pi/projects ~/projects
+

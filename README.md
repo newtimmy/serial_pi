@@ -25,4 +25,6 @@ echo "Hello, serial port!" > /dev/pts/3
 # run event_handler to detect what you are sending
 event_handler.py
 
+# download data from raspberry pi
+scp -P port_number -r pi@192.168.1.100:/home/pi/projects ~/projects
 

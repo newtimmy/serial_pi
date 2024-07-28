@@ -1,9 +1,10 @@
 import serial
 import time
+import subprocess
 
 # Configure the serial port and baud rate.
 # Replace '/dev/ttyUSB0' with your serial port name.
-serial_port = '/dev/ttyUSB0'
+serial_port = '/dev/pts/1'
 baud_rate = 9600
 
 # Initialize the serial connection.
@@ -13,6 +14,7 @@ ser = serial.Serial(serial_port, baud_rate, timeout=1)
 def handle_event():
     # Define what to do when the event is triggered.
     print("Event detected!")
+    subprocess.call(['bash',"play_sound.sh"], cwd="/home/timm")
 
 
 
@@ -24,7 +26,7 @@ def main():
                 data = ser.readline().decode('utf-8').strip()
 
                 # Check if the data matches your condition.
-                if data == "Hello data":
+                if data.find("Hello data"):
                     handle_event()
 
             # Sleep for a short period to avoid busy-waiting.

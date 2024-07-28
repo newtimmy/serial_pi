@@ -12,6 +12,19 @@ lsusb
 # read data of a given device with the program:
 read_serial.py
 
+# use socat to simulate data coming serial port
+sudo apt-get update
+sudo apt-get install socat
+
+# create sender and receiver
+socat -d -d pty,raw,echo=0 pty,raw,echo=0
+
+# send simulated serial communication
+echo "Hello, serial port!" > /dev/pts/3
+
+# run event_handler to detect what you are sending
+event_handler.py
+
 # download data from raspberry pi
 scp -P port_number -r pi@192.168.1.100:/home/pi/projects ~/projects
 

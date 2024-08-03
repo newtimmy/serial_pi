@@ -1,12 +1,10 @@
 import socket
-import sys
-
 import serial
 
 # Configure the serial port and network settings
 SERIAL_PORT = '/dev/ttyUSB0'
 BAUD_RATE = 9600
-SERVER_IP = '0.0.0.0'  # Listen on all interfaces
+SERVER_IP = '0.0.0.0'
 SERVER_PORT = 12345
 
 try:
@@ -29,7 +27,6 @@ except socket.error as e:
     print(f"Socket error: {e}")
     sys.exit(1)
 
-# Wait for a client to connect
 try:
     print("Waiting for a client to connect...")
     conn, addr = sock.accept()
@@ -42,17 +39,14 @@ except Exception as e:
 
 try:
     while True:
-        # Receive data from the network
         data = conn.recv(1024)
         if not data:
             break
         print(f"Received: {data}")
-        # Send the data to the USB device
         ser.write(data)
-        # Read the response from the USB device
+
         response = ser.read(len(data))
         print(f"Sending: {response}")
-        # Send the response back over the network
         conn.sendall(response)
 except Exception as e:
     print(f"Error: {e}")

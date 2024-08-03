@@ -1,25 +1,21 @@
 import socket
 import sys
 
-# Configure the network settings
-RPI_IP = 'newtimmys-raspberrypi.local'  # Replace with your Raspberry Pi IP address
-# RPI_IP = '192.168.2.2'  # Replace with your Raspberry Pi IP address
+# RPI_IP = '192.168.178.56'
+RPI_IP = '192.168.178.10'
 RPI_PORT = 12345
-MESSAGE = 'Hello, Raspberry Pi!'  # The message to send
+MESSAGE = 'Hello, Raspberry Pi!'
 
 try:
-    # Set up the network socket
     print(f"Attempting to connect to {RPI_IP}:{RPI_PORT}")
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.settimeout(20)  # 10 seconds timeout
+    sock.settimeout(10)
     sock.connect((RPI_IP, RPI_PORT))
     print("Connected to the server")
 
     try:
-        # Send the data
         print(f"Sending: {MESSAGE}")
         sock.sendall(MESSAGE.encode())
-        # Receive the echo
         echo = sock.recv(1024)
         print(f"Received: {echo.decode()}")
     finally:

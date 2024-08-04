@@ -10,6 +10,7 @@ SERIAL_BAUDRATE = 9600
 TCP_IP = '0.0.0.0'
 TCP_PORT = 51003
 
+
 # Function to handle incoming TCP connections
 def handle_tcp_client(client_socket, serial_port):
     try:
@@ -24,6 +25,7 @@ def handle_tcp_client(client_socket, serial_port):
     finally:
         client_socket.close()
 
+
 # Function to handle serial port
 def handle_serial(serial_port):
     buffer = ''
@@ -36,6 +38,7 @@ def handle_serial(serial_port):
                 for line in lines[:-1]:
                     print(f"Received from Serial: {line}")
                 buffer = lines[-1]
+
 
 def main():
     # Open the serial port
@@ -68,6 +71,7 @@ def main():
     finally:
         server.close()
         ser.close()
+
 
 if __name__ == "__main__":
     main()

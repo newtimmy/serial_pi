@@ -3,7 +3,7 @@ import sys
 
 # RPI_IP = '192.168.178.56'
 RPI_IP = '192.168.178.10'
-RPI_PORT = 12345
+RPI_PORT = 51003
 MESSAGE = 'Hello, Raspberry Pi!'
 
 try:

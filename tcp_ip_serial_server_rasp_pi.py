@@ -8,7 +8,6 @@ SERIAL_BAUDRATE = 9600
 TCP_IP = '0.0.0.0'
 TCP_PORT = 51003
 
-# Function to handle incoming TCP connections
 def handle_client_connection(client_socket, serial_port):
     try:
         while True:
@@ -17,14 +16,24 @@ def handle_client_connection(client_socket, serial_port):
                 break
             print(f"Received from TCP: {data}")
             serial_port.write(data)
+
+            # Wait for the full response from the serial device
+            response = b""
+            while True:
+                if serial_port.in_waiting > 0:
+                    response += serial_port.read(serial_port.in_waiting)
+                else:
+                    break
+
+            if response:
+                print(f"Received from Serial: {response}")
+                client_socket.sendall(response)
     except Exception as e:
         print(f"Connection error: {e}")
     finally:
         client_socket.close()
 
-# Main function to set up serial port and TCP server
 def main():
-    # Open the serial port
     try:
         ser = serial.Serial(SERIAL_PORT, SERIAL_BAUDRATE, timeout=1)
         print(f"Serial port {SERIAL_PORT} opened with baud rate {SERIAL_BAUDRATE}")
@@ -32,7 +41,6 @@ def main():
         print(f"Failed to open serial port: {e}")
         return
 
-    # Set up the TCP server
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     try:
         server.bind((TCP_IP, TCP_PORT))
@@ -47,23 +55,11 @@ def main():
             client_sock, addr = server.accept()
             print(f"Accepted connection from {addr}")
 
-            # Start a thread to handle the client connection
             client_handler = threading.Thread(
                 target=handle_client_connection,
                 args=(client_sock, ser)
             )
             client_handler.start()
-
-            # Forward data from the serial port to the TCP client
-            while True:
-                if ser.in_waiting > 0:
-                    data = ser.read(ser.in_waiting)
-                    print(f"Received from Serial: {data}")
-                    try:
-                        client_sock.sendall(data)
-                    except Exception as e:
-                        print(f"Failed to send data to TCP client: {e}")
-                        break
     except KeyboardInterrupt:
         print("Shutting down server...")
     finally:

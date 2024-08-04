@@ -26,10 +26,16 @@ def handle_tcp_client(client_socket, serial_port):
 
 # Function to handle serial port
 def handle_serial(serial_port):
+    buffer = ''
     while True:
         if serial_port.in_waiting > 0:
-            data = serial_port.read(serial_port.in_waiting)
-            print(f"Received from Serial: {data.decode('utf-8')}")
+            data = serial_port.read(serial_port.in_waiting).decode('utf-8')
+            buffer += data
+            if '\n' in buffer:  # Assuming newline as the delimiter
+                lines = buffer.split('\n')
+                for line in lines[:-1]:
+                    print(f"Received from Serial: {line}")
+                buffer = lines[-1]
 
 def main():
     # Open the serial port
